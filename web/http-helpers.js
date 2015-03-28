@@ -11,11 +11,24 @@ exports.headers = headers = {
 };
 
 exports.serveAssets = function(res, asset, callback) {
-  // Write some code here that helps serve up your static files!
-  // (Static files are things like html (yours or archived from others...),
-  // css, or anything that doesn't change often.)
+  fs.readFile(asset, {encoding: 'utf8'}, function(err, data){
+    if(err){
+      res.writeHead(404,exports.headers);
+      res.end();
+    }
+    exports.headers['Content-Type'] = getContentType(asset);
+    res.writeHead(200,exports.headers);
+    res.end(data);
+  })
 };
 
+var getContentType = function(url){
+  var allowedFileTypes = {'.css': 'text/css' , '.html': 'text/html'};
+  var extension = (url = url.substr(1 + url.lastIndexOf("/")).split('?')[0]).substr(url.lastIndexOf("."));
 
+  if(extension in allowedFileTypes){
+    return allowedFileTypes[extension];
+  }
 
-// As you progress, keep thinking about what helper functions you can put here!
+  return 'text/html';
+}

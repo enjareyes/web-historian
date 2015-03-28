@@ -1,12 +1,12 @@
 var http = require("http");
-var handler = require("./request-handler");
+var handler = require("./request-handler.js");
 var initialize = require("./initialize.js");
 
 // Why do you think we have this here?
 // HINT: It has to do with what's in .gitignore
 initialize();
 
-var port = 8080;
+var port = 3000;
 var ip = "127.0.0.1";
 var server = http.createServer(handler.handleRequest);
 
