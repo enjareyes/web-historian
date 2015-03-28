@@ -27,7 +27,6 @@ exports.handleRequest = function (req, res) {
         var newHeaders = Object.create(helper.headers);
         if(!bool){
           archive.addUrlToList(x.url, function(){
-            //archive.downloadUrls([x.url]);
             newHeaders['Location'] = '/loading.html';
             res.writeHead(302, newHeaders);
             res.end();
