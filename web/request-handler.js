@@ -23,9 +23,21 @@ exports.handleRequest = function (req, res) {
 
     req.on('end', function(){
       x = qs.parse(x);
-      archive.addUrlToList(x.url);
-      res.writeHead(302, helper.headers);
-      res.end();
+      archive.isUrlInList(x.url, function(bool){
+        var newHeaders = Object.create(helper.headers);
+        if(!bool){
+          archive.addUrlToList(x.url, function(){
+            //archive.downloadUrls([x.url]);
+            newHeaders['Location'] = '/loading.html';
+            res.writeHead(302, newHeaders);
+            res.end();
+          });
+        } else {
+          newHeaders['Location'] = '/' + x.url;
+          res.writeHead(302, newHeaders);
+          res.end();
+        }
+      });
     });
   }
 };
